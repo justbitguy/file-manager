@@ -1,10 +1,12 @@
 package com.example.administrator.filecleandemo.manager;
 
+
 import com.example.administrator.filecleandemo.Utils.MyApplication;
 
 /**
  * Created by Zac on 2016/8/24.
  */
+
 
 public class FileManager {
     public static final int FILE_ALL = 1 << 0;
@@ -33,6 +35,8 @@ public class FileManager {
         switch (scanType){
             case FILE_ALL:
                 // TODO: 2016/8/24
+                BigFileScanner scanner4=new BigFileScanner();
+                scanner4.startScan();
                 break;
             case FILE_IMAGE:
                 ImageFileScanner scanner = new ImageFileScanner();
@@ -40,6 +44,16 @@ public class FileManager {
                 break;
             case FILE_AUDIO:
                 // TODO: 2016/8/24
+                MusicScanner scanner3=new MusicScanner();
+                scanner3.startScan();
+                break;
+            case FILE_APK:
+                ApkFileScanner scanner1=new ApkFileScanner();
+                scanner1.startScan();
+                break;
+            case FILE_COMPRESS:
+                ZipScanner scanner2=new ZipScanner();
+                scanner2.startScan();
                 break;
             case FILE_APK:
                 ApkFileScanner apkScanner = new ApkFileScanner(MyApplication.getInstance().getApplicationContext());

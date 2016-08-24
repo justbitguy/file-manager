@@ -28,10 +28,13 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.administrator.filecleandemo.Bean.FileInfo;
+import com.example.administrator.filecleandemo.Bean.ImageFileInfo;
 import com.example.administrator.filecleandemo.Bean.Img;
 import com.example.administrator.filecleandemo.Utils.BitmapUtils;
 import com.example.administrator.filecleandemo.Utils.ImgEvent;
 import com.example.administrator.filecleandemo.Utils.MediaScannFile;
+import com.example.administrator.filecleandemo.manager.FileManager;
 
 
 import java.io.File;
@@ -45,26 +48,20 @@ import de.greenrobot.event.EventBus;
 
 
 public class SearchImg extends Activity {
-    private List<Img> imgList;
+    private List<ImageFileInfo> imgList;
     private GridView gridView;
-    private String [] mPaths=new MediaScannFile().getpaths();
-    private  MediaScannerConnection.OnScanCompletedListener listener;
-//    private Uri url = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-//    private Uri url1=MediaStore.Images.Media.INTERNAL_CONTENT_URI;
-    private Cursor cursor1,cursor2;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchimg);
         EventBus.getDefault().register(this);
-        getData();
+        FileManager.getInstance().startScan(1 << 1);
         gridView= (GridView) findViewById(R.id.searchimg_gird);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             //打开系统自带的图片浏览器
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                File file=new File(imgList.get(position).getUrl());
+                File file=new File(imgList.get(position).getPath());
                 Intent it =new Intent(Intent.ACTION_VIEW);
                 Uri mUri = Uri.parse("file://"+file.getPath());
                 it.setDataAndType(mUri, "image/*");
@@ -76,50 +73,9 @@ public class SearchImg extends Activity {
         imgList=event.getImgList();
         gridView.setAdapter(new Myadapter(imgList));
     }
-    private void getData(){
-        final ContentResolver resolver=this.getContentResolver();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new MediaScannFile().ScanFile(SearchImg.this,mPaths,null,listener);
-                cursor1=resolver.query(MediaStore.Files.getContentUri("external"),null,
-                        MediaStore.Images.Media.MIME_TYPE + "=? or "
-                                + MediaStore.Images.Media.MIME_TYPE + "=?",new String[] {  "image/jpeg","image/png" },MediaStore.Images.Media.DEFAULT_SORT_ORDER);
-                cursor2=resolver.query(MediaStore.Files.getContentUri("internal"),null,
-                        MediaStore.Images.Media.MIME_TYPE + "=? or "
-                                + MediaStore.Images.Media.MIME_TYPE + "=?",new String[] {  "image/jpeg","image/png" },MediaStore.Images.Media.DEFAULT_SORT_ORDER);
-//                if (cursor1==null&&cursor2==null){
-//                    Toast.makeText(SearchImg.this,"没有可清理的数据",Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-                imgList=new ArrayList<>();
-                for (int i=0;i<cursor1.getCount();i++){
-                    cursor1.moveToNext();
-                    Img img=new Img();
-                    long id=cursor1.getLong(cursor1.getColumnIndex(MediaStore.Images.Media._ID));
-                    String path=cursor1.getString(cursor1.getColumnIndex(MediaStore.Images.Media.DATA));
-                    img.setId(id);
-                    img.setUrl(path);
-                    imgList.add(img);
-                }
-                for (int i=0;i<cursor2.getCount();i++){
-                    cursor2.moveToNext();
-                    Img img1=new Img();
-                    String path=cursor2.getString(cursor2.getColumnIndex(MediaStore.Images.Media.DATA));
-                    img1.setUrl(path);
-                    imgList.add(img1);
-                }
-                cursor1.close();
-                cursor2.close();
-                EventBus.getDefault().post(new ImgEvent("扫描结束",imgList));
-            }
-        }).start();
-
-    }
-
     private class Myadapter extends BaseAdapter{
-    private List<Img> imgList;
-    private  Myadapter(List<Img> imgList){
+    private List<ImageFileInfo> imgList;
+    private  Myadapter(List<ImageFileInfo> imgList){
         this.imgList=imgList;
     }
     @Override
@@ -151,8 +107,8 @@ public class SearchImg extends Activity {
             view1=convertView;
             holder= (ViewHolder) view1.getTag();
         }
-        Img img=imgList.get(position);
-        String path=img.getUrl();
+        ImageFileInfo img= imgList.get(position);
+        String path=img.getPath();
         File file=new File(path);
        if (file.exists()){
             Bitmap bitmap=new BitmapUtils().decodeSampleBitmapFromFile(path,200,200);

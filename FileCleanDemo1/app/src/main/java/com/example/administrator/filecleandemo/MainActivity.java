@@ -18,34 +18,24 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 
 public class MainActivity extends Activity {
- private Button button;
+    private Button button;
     private TextView textView;
-    private List<Zip> zipList;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        EventBus.getDefault().register(this);
         button= (Button) findViewById(R.id.my_btn);
         textView= (TextView) findViewById(R.id.ceshi);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this,Classify.class);
+                Intent intent=new Intent(MainActivity.this,SearchImg.class);
                 startActivity(intent);
             }
         });
     }
-   public void onEventMainThread(ZipEvent event){
-       String msg=event.getString();
-       Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
-       int size=event.getZipList().size();
-       Log.d("ceshi",size+"///89898989");
-       textView.setText(size+"");
-   }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 }
