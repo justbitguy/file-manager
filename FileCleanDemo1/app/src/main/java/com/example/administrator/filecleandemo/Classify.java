@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.administrator.filecleandemo.manager.FileManager;
+
 public class Classify extends Activity implements View.OnClickListener{
     private TextView tv1,tv2,tv3,tv4,tv5;
     @Override
@@ -34,8 +36,7 @@ private void init(){
               startActivity(intent);
               break;
           case R.id.class_apk:
-              Intent intent1=new Intent(Classify.this,SearchApk.class);
-              startActivity(intent1);
+              FileManager.getInstance().startScan(FileManager.FILE_APK);
               break;
           case R.id.class_yasuo:
               Intent intent2=new Intent(Classify.this,SearchZip.class);

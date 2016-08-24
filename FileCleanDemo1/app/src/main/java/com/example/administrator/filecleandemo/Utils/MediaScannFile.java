@@ -10,7 +10,7 @@ import android.util.Log;
 public class MediaScannFile {
     public static MediaScannerConnection ScanFile(Context context, String[] filePath, String[] mineType,
                                                   MediaScannerConnection.OnScanCompletedListener listener){
-        CilentPoxy client = new CilentPoxy(filePath, mineType, listener);
+        ClientProxy client = new ClientProxy(filePath, mineType, listener);
         try {
             MediaScannerConnection connection = new MediaScannerConnection(
                     context.getApplicationContext(), client);
@@ -23,13 +23,13 @@ public class MediaScannFile {
         return null;
 
     }
-    static class CilentPoxy implements MediaScannerConnection.MediaScannerConnectionClient{
+    static class ClientProxy implements MediaScannerConnection.MediaScannerConnectionClient{
         final String[] mPaths;
         final String[] mMimeTypes;
         final MediaScannerConnection.OnScanCompletedListener mClient;
         MediaScannerConnection mConnection;
         int mNextPath;
-        CilentPoxy(String[] mPaths, String[] mMimeTypes, MediaScannerConnection.OnScanCompletedListener mClient) {
+        ClientProxy(String[] mPaths, String[] mMimeTypes, MediaScannerConnection.OnScanCompletedListener mClient) {
             this.mPaths = mPaths;
             this.mMimeTypes = mMimeTypes;
             this.mClient = mClient;

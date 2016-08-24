@@ -7,6 +7,6 @@ import java.io.File;
  */
 
 public class FileInfo {
-    String path;
-    long size;
+    public String path;
+    public long size;
 }

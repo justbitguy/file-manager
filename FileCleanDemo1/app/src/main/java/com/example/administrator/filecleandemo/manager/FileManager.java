@@ -1,5 +1,7 @@
 package com.example.administrator.filecleandemo.manager;
 
+import com.example.administrator.filecleandemo.Utils.MyApplication;
+
 /**
  * Created by Zac on 2016/8/24.
  */
@@ -39,6 +41,9 @@ public class FileManager {
             case FILE_AUDIO:
                 // TODO: 2016/8/24
                 break;
+            case FILE_APK:
+                ApkFileScanner apkScanner = new ApkFileScanner(MyApplication.getInstance().getApplicationContext());
+                apkScanner.startScan();
             // TODO: 2016/8/24  
         }
     }
