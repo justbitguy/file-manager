@@ -7,9 +7,11 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.administrator.filecleandemo.bean.FileInfo;
 import com.example.administrator.filecleandemo.bean.MusicFileInfo;
+import com.example.administrator.filecleandemo.bean.VideoFileInfo;
 import com.example.administrator.filecleandemo.utils.MyApplication;
 
 import java.util.ArrayList;
@@ -39,9 +41,12 @@ public class MusicFileScanner extends BaseFileScanner {
     @Override
     protected void updateFileData(){
         final ContentResolver resolver=mContext.getContentResolver();
-        Cursor cursor=resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,null,null,null,
+        Cursor cursor=resolver.query(Uri.parse("content://media/external/file"),null,null,null,
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
 
+        if (cursor==null){
+            Toast.makeText(mContext,"没有找到音乐文件",Toast.LENGTH_SHORT).show();
+        }
         for (int i=0;i<cursor.getCount();i++) {
             cursor.moveToNext();
             MusicFileInfo musicFile=new MusicFileInfo();
@@ -55,7 +60,7 @@ public class MusicFileScanner extends BaseFileScanner {
                     .getColumnIndex(MediaStore.Audio.Media.DURATION));// 时长
             long size = cursor.getLong(cursor
                     .getColumnIndex(MediaStore.Audio.Media.SIZE)); // 文件大小
-            String url = cursor.getString(cursor
+            String path = cursor.getString(cursor
                     .getColumnIndex(MediaStore.Audio.Media.DATA)); // 文件路径
             int isMusic = cursor.getInt(cursor
                     .getColumnIndex(MediaStore.Audio.Media.IS_MUSIC));// 是否为音乐
@@ -65,7 +70,7 @@ public class MusicFileScanner extends BaseFileScanner {
 //                music.setArtist(artist);
 //                music.setDuration(duration);
                 musicFile.setSize(size);
-                musicFile.setPath(url);
+                musicFile.setPath(path);
                 mFileList.add(musicFile);
             }
         }

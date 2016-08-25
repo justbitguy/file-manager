@@ -1,6 +1,8 @@
 package com.example.administrator.filecleandemo.manager;
 
 
+import com.example.administrator.filecleandemo.bean.VideoFileInfo;
+
 /**
  * Created by Zac on 2016/8/24.
  */
@@ -41,7 +43,6 @@ public class FileManager {
                 scanner.startScan();
                 break;
             case FILE_AUDIO:
-                // TODO: 2016/8/24
                 MusicFileScanner scanner3=new MusicFileScanner();
                 scanner3.startScan();
                 break;
@@ -52,7 +53,11 @@ public class FileManager {
             case FILE_APK:
                 ApkFileScanner apkScanner = new ApkFileScanner();
                 apkScanner.startScan();
-            // TODO: 2016/8/24  
+                break;
+            case FILE_VIDEO:
+                VideoFileScanner videoScanner = new VideoFileScanner();
+                videoScanner.startScan();
+                break;
         }
     }
 }

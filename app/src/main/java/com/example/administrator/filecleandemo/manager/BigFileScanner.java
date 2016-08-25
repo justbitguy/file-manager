@@ -7,6 +7,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.administrator.filecleandemo.bean.BigFileInfo;
 import com.example.administrator.filecleandemo.bean.FileInfo;
@@ -40,11 +41,13 @@ public class BigFileScanner extends BaseFileScanner {
     protected void updateFileData(){
         synchronized (mFileList){
             final ContentResolver resolver=mContext.getContentResolver();
-            Cursor cursor=resolver.query(MediaStore.Files.getContentUri("external"),new String[]{
+            Cursor cursor=resolver.query(Uri.parse("content://media/external/file"),new String[]{
                             MediaStore.Files.FileColumns.SIZE,MediaStore.Files.FileColumns.DATA},MediaStore.Files.FileColumns.SIZE+">?",
                     new String[]{"200000"},null
             );
-
+            if (cursor==null){
+                Toast.makeText(mContext,"没有找到大文件",Toast.LENGTH_SHORT).show();
+            }
             for (int i=0;i<cursor.getCount();i++){
                 BigFileInfo bigfile=new BigFileInfo();
                 cursor.moveToNext();

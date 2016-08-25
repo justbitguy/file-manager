@@ -7,6 +7,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.administrator.filecleandemo.bean.FileInfo;
 import com.example.administrator.filecleandemo.bean.ImageFileInfo;
@@ -40,10 +41,13 @@ public class ImageFileScanner extends BaseFileScanner {
     protected void updateFileData(){
         synchronized (mFileList){
             final ContentResolver resolver=mContext.getContentResolver();
-            Cursor cursor=resolver.query(MediaStore.Files.getContentUri("external"),null,
+            Cursor cursor=resolver.query(Uri.parse("content://media/external/file"),null,
                     MediaStore.Images.Media.MIME_TYPE + "=? or "
                             + MediaStore.Images.Media.MIME_TYPE + "=?",new String[] {  "image/jpeg","image/png" },MediaStore.Images.Media.DEFAULT_SORT_ORDER);
 
+            if (cursor==null){
+                Toast.makeText(mContext,"没有找到图片文件",Toast.LENGTH_SHORT).show();
+            }
             for (int i=0;i<cursor.getCount();i++){
                 cursor.moveToNext();
                 ImageFileInfo imgFile=new ImageFileInfo();

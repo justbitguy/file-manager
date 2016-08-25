@@ -7,6 +7,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.administrator.filecleandemo.bean.FileInfo;
 import com.example.administrator.filecleandemo.bean.ZipFileInfo;
@@ -40,10 +41,13 @@ public class ZipFileScanner extends BaseFileScanner {
     protected void updateFileData(){
        synchronized (mFileList){
            final ContentResolver resolver= mContext.getContentResolver();
-           Cursor cursor = resolver.query(MediaStore.Files.getContentUri("external"),
+           Cursor cursor = resolver.query(Uri.parse("content://media/external/file"),
                    new String[]{MediaStore.Files.FileColumns._ID, MediaStore.Files.FileColumns.TITLE, MediaStore.Files.FileColumns.DATA},
                    MediaStore.Files.FileColumns.MIME_TYPE + "= ?", new String[]{"application/zip"}, null);
 
+           if (cursor==null){
+               Toast.makeText(mContext,"没有找到压缩文件",Toast.LENGTH_SHORT).show();
+           }
            for (int i = 0; i < cursor.getCount(); i++) {
                ZipFileInfo zipFile=new ZipFileInfo();
                cursor.moveToNext();
