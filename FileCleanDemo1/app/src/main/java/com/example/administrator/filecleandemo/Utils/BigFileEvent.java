@@ -1,6 +1,4 @@
-package com.example.administrator.filecleandemo.Utils;
-
-import com.example.administrator.filecleandemo.Bean.BigFiles;
+package com.example.administrator.filecleandemo.utils;
 
 import java.util.List;
 

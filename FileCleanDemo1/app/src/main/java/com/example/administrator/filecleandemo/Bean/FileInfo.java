@@ -1,6 +1,4 @@
-package com.example.administrator.filecleandemo.Bean;
-
-import java.io.File;
+package com.example.administrator.filecleandemo.bean;
 
 public class FileInfo {
 

@@ -1,4 +1,4 @@
-package com.example.administrator.filecleandemo.Bean;
+package com.example.administrator.filecleandemo.bean;
 
 
 

@@ -1,8 +1,6 @@
-package com.example.administrator.filecleandemo.Utils;
+package com.example.administrator.filecleandemo.utils;
 
-import com.example.administrator.filecleandemo.Bean.FileInfo;
-import com.example.administrator.filecleandemo.Bean.ImageFileInfo;
-import com.example.administrator.filecleandemo.Bean.Img;
+import com.example.administrator.filecleandemo.bean.ImageFileInfo;
 
 import java.util.List;
 

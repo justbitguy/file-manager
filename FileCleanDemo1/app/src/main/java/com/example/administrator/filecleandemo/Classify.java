@@ -18,7 +18,7 @@ public class Classify extends Activity implements View.OnClickListener{
     }
 private void init(){
     tv1= (TextView) findViewById(R.id.class_music);
-    tv2= (TextView) findViewById(R.id.class_video);
+    tv2= (TextView) findViewById(R.id.class_image);
     tv3= (TextView) findViewById(R.id.class_yasuo);
     tv4= (TextView) findViewById(R.id.class_bigfile);
     tv5= (TextView) findViewById(R.id.class_apk);
@@ -32,23 +32,19 @@ private void init(){
     public void onClick(View view) {
       switch (view.getId()){
           case R.id.class_music:
-              Intent intent=new Intent(Classify.this,SearchMusic.class);
-              startActivity(intent);
+              FileManager.getInstance().startScan(FileManager.FILE_AUDIO);
               break;
           case R.id.class_apk:
               FileManager.getInstance().startScan(FileManager.FILE_APK);
               break;
           case R.id.class_yasuo:
-              Intent intent2=new Intent(Classify.this,SearchZip.class);
-              startActivity(intent2);
+              FileManager.getInstance().startScan(FileManager.FILE_COMPRESS);
               break;
-          case R.id.class_video:
-              Intent intent3=new Intent(Classify.this,SearchImg.class);
-              startActivity(intent3);
+          case R.id.class_image:
+              FileManager.getInstance().startScan(FileManager.FILE_IMAGE);
               break;
           case R.id.class_bigfile:
-              Intent intent4=new Intent(Classify.this,SearchBigFiles.class);
-              startActivity(intent4);
+              FileManager.getInstance().startScan(FileManager.FILE_ALL);
               break;
       }
     }

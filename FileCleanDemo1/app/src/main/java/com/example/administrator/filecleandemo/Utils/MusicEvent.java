@@ -1,7 +1,5 @@
-package com.example.administrator.filecleandemo.Utils;
+package com.example.administrator.filecleandemo.utils;
 
-
-import com.example.administrator.filecleandemo.Bean.Music;
 
 import java.util.List;
 

@@ -1,8 +1,6 @@
 package com.example.administrator.filecleandemo.manager;
 
 
-import com.example.administrator.filecleandemo.Utils.MyApplication;
-
 /**
  * Created by Zac on 2016/8/24.
  */
@@ -47,16 +45,12 @@ public class FileManager {
                 MusicScanner scanner3=new MusicScanner();
                 scanner3.startScan();
                 break;
-            case FILE_APK:
-                ApkFileScanner scanner1=new ApkFileScanner();
-                scanner1.startScan();
-                break;
             case FILE_COMPRESS:
                 ZipScanner scanner2=new ZipScanner();
                 scanner2.startScan();
                 break;
             case FILE_APK:
-                ApkFileScanner apkScanner = new ApkFileScanner(MyApplication.getInstance().getApplicationContext());
+                ApkFileScanner apkScanner = new ApkFileScanner();
                 apkScanner.startScan();
             // TODO: 2016/8/24  
         }

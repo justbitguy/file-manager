@@ -1,4 +1,4 @@
-package com.example.administrator.filecleandemo.Utils;
+package com.example.administrator.filecleandemo.utils;
 
 
 import android.app.Application;
