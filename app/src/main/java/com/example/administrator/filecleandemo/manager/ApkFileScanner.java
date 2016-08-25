@@ -35,7 +35,6 @@ public class ApkFileScanner extends BaseFileScanner{
 
     @Override
     protected void startScan(){
-        super.startScan();
         MediaScannerConnection.scanFile(mContext, getScanPaths(), null, mListener);
     }
 

@@ -19,9 +19,7 @@ public abstract class BaseFileScanner {
     protected List<FileInfo> mFileList = new ArrayList<>();
     protected Context mContext;
 
-    protected void startScan(){
-        initScanPaths();
-    }
+    abstract protected void startScan();
 
     protected String[] getScanPaths(){
         String[] paths = mScanPaths.toArray(new String[0]);
@@ -36,5 +34,6 @@ public abstract class BaseFileScanner {
 
     BaseFileScanner(){
         mContext = MyApplication.getInstance().getApplicationContext();
+        initScanPaths();
     }
 }
