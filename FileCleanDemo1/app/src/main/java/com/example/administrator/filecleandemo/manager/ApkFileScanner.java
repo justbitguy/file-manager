@@ -33,37 +33,38 @@ public class ApkFileScanner extends BaseFileScanner{
     // FIXME: 2016/8/24 这个是需要放到后台线程的，现在暂时没有处理；
     @Override
     protected void startScan(){
-        MediaScannerConnection.scanFile(mContext, new String[]{Environment.getExternalStorageDirectory().getPath()}, null, null);
-//        MediaScanner scanner = new MediaScanner();
-//        scanner.scanFile(mContext, ScanPathManager.getScanRootPaths().toArray(new String[0]), null, mListener);
+        MediaScannerConnection.scanFile(mContext, new String[]{Environment.getExternalStorageDirectory().getPath()}, null, mListener);
         // // FIXME: 2016/8/24
-//        try {
-//            Thread.sleep(18000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         updateFileData();
     }
-
+    //MediaStore.Files.getContentUri("external")
+    //"content://storage/emulated/0"
     private void updateFileData(){
         synchronized (mFileList) {
             final ContentResolver resolver = mContext.getContentResolver();
-            Cursor cursor = resolver.query(MediaStore.Files.getContentUri("external"),
-                    new String[]{MediaStore.Files.FileColumns._ID, MediaStore.Files.FileColumns.TITLE, MediaStore.Files.FileColumns.DATA},
-                    MediaStore.Files.FileColumns.MIME_TYPE + "= ?", new String[]{"application/vnd.android.package-archive"},
-                    null);
+//            Cursor cursor = resolver.query(MediaStore.Files.getContentUri("external"),
+//                    new String[]{MediaStore.Files.FileColumns._ID, MediaStore.Files.FileColumns.TITLE, MediaStore.Files.FileColumns.DATA},
+//                    MediaStore.Files.FileColumns.MIME_TYPE + "= ?", new String[]{"application/vnd.android.package-archive"},
+//                    null);
+            String[] projection = new String[] { MediaStore.Files.FileColumns._ID,
+                    MediaStore.Files.FileColumns.DATA,
+                    MediaStore.Files.FileColumns.SIZE };
+            Cursor cursor = resolver.query(
+                    Uri.parse("content://media/external/file"), projection,
+                    MediaStore.Files.FileColumns.DATA + " like ?", new String[]{"%.apk"}, null);
             mFileList = new ArrayList<>();
             for (int i = 0; i < cursor.getCount(); i++) {
                 ApkFileInfo apkFile = new ApkFileInfo();
                 cursor.moveToNext();
                 long id = cursor.getLong(cursor.getColumnIndex(MediaStore.Files.FileColumns._ID));
                 String url = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.TITLE));
-                apkFile.setTitle(title);
+//                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.TITLE));
+//                apkFile.setTitle(title);
                 apkFile.setUrl(url);
                 apkFile.setId(id);
                 mFileList.add(apkFile);
             }
+            Log.d("queryPath","path:"+MediaStore.Files.getContentUri("external"));
             cursor.close();
         }
         notifyDataChanged();
