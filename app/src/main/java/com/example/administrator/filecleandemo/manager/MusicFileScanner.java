@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.example.administrator.filecleandemo.bean.FileInfo;
 import com.example.administrator.filecleandemo.bean.MusicFileInfo;
 import com.example.administrator.filecleandemo.utils.MyApplication;
 
@@ -18,23 +19,30 @@ import java.util.List;
  * Created by Administrator on 2016/8/24.
  */
 
-public class MusicScanner extends BaseFileScanner {
-    Context mContext;
-    private List<MusicFileInfo> mFileList=new ArrayList<>();
-    public MusicScanner(){
-        this.mContext= MyApplication.getInstance().getApplicationContext();
+public class MusicFileScanner extends BaseFileScanner {
+    private static final String LOG_TAG = "file-music";
+
+    public MusicFileScanner(){
+        super();
     }
+
     @Override
-    void startScan() {
-        MediaScanner scanner=new MediaScanner();
-        scanner.scanFile(mContext, ScanPathManager.getScanRootPaths().toArray(new String[0]),null,mListener);
-        updateFileData();
+    protected void initScanPaths(){
+        mScanPaths.addAll(ScanPathManager.getScanRootPaths());
     }
-    private void updateFileData(){
+
+    @Override
+    protected void startScan() {
+        super.startScan();
+        MediaScannerConnection.scanFile(mContext, getScanPaths(), null, mListener);
+    }
+
+    @Override
+    protected void updateFileData(){
         final ContentResolver resolver=mContext.getContentResolver();
         Cursor cursor=resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,null,null,null,
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-        mFileList=new ArrayList<>();
+
         for (int i=0;i<cursor.getCount();i++) {
             cursor.moveToNext();
             MusicFileInfo musicFile=new MusicFileInfo();
@@ -63,18 +71,36 @@ public class MusicScanner extends BaseFileScanner {
             }
         }
         cursor.close();
+    }
+
+
+    @Override
+    protected void notifyDataChanged(){
+        for (FileInfo info : mFileList){
+            Log.d(LOG_TAG, "path: " + info.getPath());
+        }
+
+        // TODO: 2016/8/24  eventbust post message...
+        Log.d(LOG_TAG, "notify: " + Thread.currentThread().getName() + ", id: " + Thread.currentThread().getId());
+    }
+
+    @Override
+    protected void onScanFinish(){
+        Log.d(LOG_TAG, "onScanFinish");
+        updateFileData();
         notifyDataChanged();
     }
-    private void notifyDataChanged(){
-        for (MusicFileInfo fileInfo:mFileList){
-            Log.d("file-music","url:"+fileInfo.getPath());
-        }
-    }
+
     MediaScannerConnection.OnScanCompletedListener mListener = new MediaScannerConnection.OnScanCompletedListener(){
         @Override
         public void onScanCompleted(String path, Uri uri){
-
+            Log.d(LOG_TAG, "onScanCompleted: path = " + path + ", uri = " + uri);
+            synchronized (mScanPaths) {
+                mScanPaths.remove(path);
+                if (mScanPaths.size() == 0) {
+                    onScanFinish();
+                }
+            }
         }
     };
-
 }

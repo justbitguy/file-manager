@@ -42,11 +42,11 @@ public class FileManager {
                 break;
             case FILE_AUDIO:
                 // TODO: 2016/8/24
-                MusicScanner scanner3=new MusicScanner();
+                MusicFileScanner scanner3=new MusicFileScanner();
                 scanner3.startScan();
                 break;
             case FILE_COMPRESS:
-                ZipScanner scanner2=new ZipScanner();
+                ZipFileScanner scanner2=new ZipFileScanner();
                 scanner2.startScan();
                 break;
             case FILE_APK:

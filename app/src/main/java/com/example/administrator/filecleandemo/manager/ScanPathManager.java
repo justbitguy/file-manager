@@ -17,6 +17,7 @@ public class ScanPathManager {
     private static final String mDataDirectory = Environment.getDataDirectory().getAbsolutePath();
     private static final String mDownloadCacheDirectory =Environment.getDownloadCacheDirectory().getPath();
     private static List<String> mScanRootPaths = new ArrayList<>();
+
     static List<String> getScanRootPaths(){
         synchronized (mScanRootPaths){
             if (mScanRootPaths.size() == 0){
@@ -37,5 +38,9 @@ public class ScanPathManager {
             }
         }
         return mScanRootPaths;
+    }
+
+    static String getExternalStorageDirectory(){
+        return mExternalDirectory;
     }
 }
