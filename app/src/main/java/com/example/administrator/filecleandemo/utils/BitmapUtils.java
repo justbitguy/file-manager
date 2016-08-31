@@ -3,6 +3,8 @@ package com.example.administrator.filecleandemo.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.InputStream;
+
 public class BitmapUtils {
     public static Bitmap decodeSampleBitmapFromFile(String path, int reqWidth, int reqHeight){
         final BitmapFactory.Options options= new BitmapFactory.Options();
@@ -24,6 +26,14 @@ public class BitmapUtils {
             }
         }
         return inSampleSize;
+    }
+    public static Bitmap decodeSampleBitmapFromStream(InputStream in ,int reqWidth,int reqHeight){
+        final BitmapFactory.Options options=new  BitmapFactory.Options();
+        options.inJustDecodeBounds=true;
+        BitmapFactory.decodeStream(in,null,options);
+        options.inSampleSize=cacluateInSampleSize(options,reqWidth,reqHeight);
+        options.inJustDecodeBounds=false;
+        return  BitmapFactory.decodeStream(in,null,options);
     }
 }
 

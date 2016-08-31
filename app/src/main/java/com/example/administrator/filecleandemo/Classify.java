@@ -43,6 +43,8 @@ private void init(){
               FileManager.getInstance().startScan(FileManager.FILE_COMPRESS);
               break;
           case R.id.class_image:
+              Intent intent=new Intent(Classify.this,AlbumsActivity.class);
+              startActivity(intent);
               FileManager.getInstance().startScan(FileManager.FILE_IMAGE);
               break;
           case R.id.class_bigfile:
