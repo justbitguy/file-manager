@@ -1,5 +1,7 @@
 package com.example.administrator.filecleandemo.bean;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Administrator on 2016/8/30.
  */
@@ -7,17 +9,17 @@ package com.example.administrator.filecleandemo.bean;
 public class HideFileInfo {
     String oldpath;
     String newpath;
-    long  imgid;
-
-    public long getImgid() {
-        return imgid;
-    }
-
-    public void setImgid(long imgid) {
-        this.imgid = imgid;
-    }
+    private Bitmap bitmap;
 
     public HideFileInfo(){}
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
 
     public String getOldpath() {
         return oldpath;

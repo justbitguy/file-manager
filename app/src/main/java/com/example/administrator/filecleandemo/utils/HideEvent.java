@@ -23,13 +23,16 @@ public class HideEvent {
         this.hideFileInfos = hideFileInfos;
     }
 
-    public HideEvent(String msg, List<Bitmap> bitmapList){
+    public HideEvent(String msg, List<Bitmap> bitmapList, List<HideFileInfo> hideFileInfos){
         this.msg=msg;
         this.bitmapList=bitmapList;
+        this.hideFileInfos=hideFileInfos;
     }
+
     public HideEvent(List<HideFileInfo> hideFileInfos){
         this.hideFileInfos=hideFileInfos;
     }
+
     public String getMsg() {
         return msg;
     }
