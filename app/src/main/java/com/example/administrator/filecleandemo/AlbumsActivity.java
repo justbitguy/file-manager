@@ -150,4 +150,51 @@ public class AlbumsActivity extends Activity implements View.OnClickListener{
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+    //获取去掉后缀名的文件名
+    public static String getFileNameNoEx(String filename) {
+        if ((filename != null) && (filename.length() > 0)) {
+            int dot = filename.lastIndexOf('.');
+            if ((dot >-1) && (dot < (filename.length()))) {
+                return filename.substring(0, dot);
+            }
+        }
+        return filename;
+    }
+    public static void cutFile(String oldpath, String newpath){
+        File file=new File(oldpath);
+        if (file.exists()){
+            try {
+                //int bytesum=0;
+                int byteread=0;
+                InputStream in=new FileInputStream(oldpath);//读入源文件
+                FileOutputStream out =new FileOutputStream(newpath);//写到新文件中
+                byte[] buffer=new byte[1024];
+                while((byteread=in.read(buffer))!=-1){
+                    //bytesum+=byteread;
+                    out.write(buffer,0,byteread);
+                }
+                in.close();
+                file.delete();
+                Log.d("cutfile",file.getPath()+"++++++++++++++++");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //创建数据库
+    public SQLiteDatabase getDB(){
+        MySqliteOpenHelper helper=new MySqliteOpenHelper(context,"imgpath.db",null,1);
+        SQLiteDatabase db=helper.getReadableDatabase();
+        return  db;
+    }
+    private void insert(String oldpath,String newpath){
+        SQLiteDatabase db=getDB();
+        ContentValues values=new ContentValues();
+        values.put("oldpath",oldpath);
+        values.put("newpath",newpath);
+        db.insert("path",null,values);
+        db.close();
+    }
 }

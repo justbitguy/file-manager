@@ -115,6 +115,7 @@ public class CheckActivity extends Activity {
         Log.d("cursorcountsize",cursor.getCount()+"opopopopopopopopop");
         while (cursor.moveToNext()){
             HideFileInfo hideFile=new HideFileInfo();
+<<<<<<< HEAD
                 String oldpath=cursor.getString(cursor.getColumnIndex("oldpath"));
                 String newpath=cursor.getString(cursor.getColumnIndex("newpath"));
                 String bitinfo=readFile(newpath);
@@ -132,6 +133,24 @@ public class CheckActivity extends Activity {
         }
         Log.d("getdatahideinfo",hideFileInfos.size()+"ooooooooooooooooooooo");
         EventBus.getDefault().post(new HideEvent(hideFileInfos));
+=======
+            String oldpath=cursor.getString(cursor.getColumnIndex("oldpath"));
+            String newpath=cursor.getString(cursor.getColumnIndex("newpath"));
+            File file=new File(newpath);
+            if (file.exists()){
+                hideFile.setOldpath(oldpath);
+                hideFile.setNewpath(newpath);
+                hideFileInfos.add(hideFile);
+            }else {
+                String sql1="delete from path where newpath=?";
+                db.execSQL(sql1,new Object[]{newpath});
+                db.close();
+            }
+        }
+        db.close();
+        LoadBitmap(hideFileInfos);
+        //EventBus.getDefault().post(new HideEvent(hideFileInfos));
+>>>>>>> dfcaa8d... 文件管理 + 隐私相册
     }
 
     //从文件中读取字符串的内容
@@ -145,6 +164,7 @@ public class CheckActivity extends Activity {
         return sb.toString();
     }
 
+<<<<<<< HEAD
     //将图片还原到原来的路径 Base64解码
     private void restore(int position,String oldpath,String newpath){
         File file=new File(oldpath);
@@ -166,6 +186,8 @@ public class CheckActivity extends Activity {
 
     }
 
+=======
+>>>>>>> dfcaa8d... 文件管理 + 隐私相册
     @Override
     protected void onDestroy() {
         super.onDestroy();
