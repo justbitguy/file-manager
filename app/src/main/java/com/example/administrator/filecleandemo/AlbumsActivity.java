@@ -20,6 +20,7 @@ import android.widget.ImageView;
 
 import com.example.administrator.filecleandemo.bean.FileInfo;
 import com.example.administrator.filecleandemo.bean.ImageFileInfo;
+import com.example.administrator.filecleandemo.datahelper.MySqliteOpenHelper;
 import com.example.administrator.filecleandemo.manager.FileManager;
 import com.example.administrator.filecleandemo.utils.BasecodeCompress;
 import com.example.administrator.filecleandemo.utils.BitmapUtils;
@@ -68,6 +69,7 @@ public class AlbumsActivity extends Activity implements View.OnClickListener{
         imageFileInfoList=event.getImgList();
         adapter=new Myadapter(imageFileInfoList);
         gridView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void init(){
@@ -104,12 +106,12 @@ public class AlbumsActivity extends Activity implements View.OnClickListener{
 
         @Override
         public Object getItem(int position) {
-            return null;
+            return imageFileInfoList.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
 
         @Override
@@ -185,7 +187,7 @@ public class AlbumsActivity extends Activity implements View.OnClickListener{
     }
     //创建数据库
     public SQLiteDatabase getDB(){
-        MySqliteOpenHelper helper=new MySqliteOpenHelper(context,"imgpath.db",null,1);
+        MySqliteOpenHelper helper=new MySqliteOpenHelper(this,"imgpath.db",null,1);
         SQLiteDatabase db=helper.getReadableDatabase();
         return  db;
     }

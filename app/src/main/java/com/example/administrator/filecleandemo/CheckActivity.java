@@ -74,17 +74,17 @@ public class CheckActivity extends Activity {
 
         @Override
         public int getCount() {
-          return   hideFileInfos.size();
+            return   hideFileInfos.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return null;
+            return hideFileInfos.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
 
         @Override
@@ -110,49 +110,29 @@ public class CheckActivity extends Activity {
     }
 
     private void getData() {
-        hideFileInfos=new ArrayList<>();
-        Cursor cursor=new DataUtils().query();
-        Log.d("cursorcountsize",cursor.getCount()+"opopopopopopopopop");
-        while (cursor.moveToNext()){
-            HideFileInfo hideFile=new HideFileInfo();
-<<<<<<< HEAD
-                String oldpath=cursor.getString(cursor.getColumnIndex("oldpath"));
-                String newpath=cursor.getString(cursor.getColumnIndex("newpath"));
-                String bitinfo=readFile(newpath);
-                Bitmap bitmap=new BasecodeCompress().StringtoBitmap(bitinfo);
-                File file=new File(newpath);
-                if (file.exists()){
-                    hideFile.setBitmap(bitmap);
-                    hideFile.setOldpath(oldpath);
-                    hideFile.setNewpath(newpath);
-                    hideFileInfos.add(hideFile);
-                }else {
-                    file.delete();
-                    new DataUtils().exexSQL(newpath);
-        }
-        }
-        Log.d("getdatahideinfo",hideFileInfos.size()+"ooooooooooooooooooooo");
-        EventBus.getDefault().post(new HideEvent(hideFileInfos));
-=======
-            String oldpath=cursor.getString(cursor.getColumnIndex("oldpath"));
-            String newpath=cursor.getString(cursor.getColumnIndex("newpath"));
-            File file=new File(newpath);
-            if (file.exists()){
+        hideFileInfos = new ArrayList<>();
+        Cursor cursor = new DataUtils().query();
+        Log.d("cursorcountsize", cursor.getCount() + "opopopopopopopopop");
+        while (cursor.moveToNext()) {
+            HideFileInfo hideFile = new HideFileInfo();
+            String oldpath = cursor.getString(cursor.getColumnIndex("oldpath"));
+            String newpath = cursor.getString(cursor.getColumnIndex("newpath"));
+            String bitinfo = readFile(newpath);
+            Bitmap bitmap = new BasecodeCompress().StringtoBitmap(bitinfo);
+            File file = new File(newpath);
+            if (file.exists()) {
+                hideFile.setBitmap(bitmap);
                 hideFile.setOldpath(oldpath);
                 hideFile.setNewpath(newpath);
                 hideFileInfos.add(hideFile);
-            }else {
-                String sql1="delete from path where newpath=?";
-                db.execSQL(sql1,new Object[]{newpath});
-                db.close();
+            } else {
+                file.delete();
+                new DataUtils().exexSQL(newpath);
             }
         }
-        db.close();
-        LoadBitmap(hideFileInfos);
-        //EventBus.getDefault().post(new HideEvent(hideFileInfos));
->>>>>>> dfcaa8d... 文件管理 + 隐私相册
+        Log.d("getdatahideinfo",hideFileInfos.size()+"ooooooooooooooooooooo");
+        EventBus.getDefault().post(new HideEvent(hideFileInfos));
     }
-
     //从文件中读取字符串的内容
     private String readFile(String newpath){
         StringBuffer sb = new StringBuffer();
@@ -164,34 +144,29 @@ public class CheckActivity extends Activity {
         return sb.toString();
     }
 
-<<<<<<< HEAD
     //将图片还原到原来的路径 Base64解码
     private void restore(int position,String oldpath,String newpath){
         File file=new File(oldpath);
-            File file1=new File(newpath);
-            if (file1.exists()){
-                file1.delete();
+        File file1=new File(newpath);
+        if (file1.exists()){
+        file1.delete();
         }
         Bitmap bitmap=hideFileInfos.get(position).getBitmap();
         try {
-            FileOutputStream out=new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG,90,out);
-            out.flush();
-            out.close();
+        FileOutputStream out=new FileOutputStream(file);
+        bitmap.compress(Bitmap.CompressFormat.JPEG,90,out);
+        out.flush();
+        out.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+        e.printStackTrace();
         }
 
-    }
-
-=======
->>>>>>> dfcaa8d... 文件管理 + 隐私相册
+        }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        }
     }
-
-}
